@@ -2,8 +2,10 @@ package com.nishan.tasker.Activity;
 
 
 import android.Manifest;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -44,6 +46,33 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     String selectedLog = "";
 
     LocationManager locationManager;
+
+    private BroadcastReceiver broadcastReceiver;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (broadcastReceiver == null){
+            broadcastReceiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+
+                    intent.getExtras().get("coordinates");
+
+                }
+            };
+        }
+
+        registerReceiver(broadcastReceiver,new IntentFilter("location_update"));
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(broadcastReceiver != null){
+            unregisterReceiver(broadcastReceiver);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -46,6 +46,10 @@
 
         </receiver>
 
+        <service android:name=".Service.GPS_Service">
+
+        </service>
+
     </application>
 
 </manifest>
