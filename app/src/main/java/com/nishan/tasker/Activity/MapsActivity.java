@@ -28,8 +28,10 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
 import com.nishan.tasker.MainActivity;
 import com.nishan.tasker.R;
+import com.nishan.tasker.Service.GPS_Service;
 
 import java.io.IOException;
 import java.util.List;
@@ -45,6 +47,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     String selectedLat = "";
     String selectedLog = "";
 
+
     LocationManager locationManager;
 
     private BroadcastReceiver broadcastReceiver;
@@ -57,13 +60,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 @Override
                 public void onReceive(Context context, Intent intent) {
 
-                    intent.getExtras().get("coordinates");
+                   intent.getExtras().get("coordinates_X");
+                    intent.getExtras().get("coordinates_Y");
+
+
+
 
                 }
             };
         }
 
         registerReceiver(broadcastReceiver,new IntentFilter("location_update"));
+    }
+
+    public void startService(){
+        Intent i = new Intent(getApplicationContext(), GPS_Service.class);
+        startService(i);
     }
 
     @Override
@@ -106,6 +118,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                     startActivity(intent);
 
+
+
                     finish();
 
                 }
@@ -115,7 +129,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
 
 
-        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -167,31 +181,56 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                 }
             });
-        } else if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, new LocationListener() {
-                @Override
-                public void onLocationChanged(Location location) {
 
+            startService();
+        }
+
+
+
+        else {
+            if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, new LocationListener() {
+                    @Override
+                    public void onLocationChanged(Location location) {
+
+                        double lat2 = location.getLatitude();
+                        double lat1 = location.getLongitude();
+
+                        Intent intent = new Intent(MapsActivity.this, MainActivity.class);
+
+                        intent.putExtra("GPSlat", lat2);
+                        intent.putExtra("GPSlng", lat1);
+
+                        startActivity(intent);
+
+
+
+
+
+                    }
+
+                @Override
+                public void onStatusChanged (String provider,int status, Bundle extras){
 
                 }
 
                 @Override
-                public void onStatusChanged(String provider, int status, Bundle extras) {
+                public void onProviderEnabled (String provider){
 
                 }
 
                 @Override
-                public void onProviderEnabled(String provider) {
-
-                }
-
-                @Override
-                public void onProviderDisabled(String provider) {
+                public void onProviderDisabled (String provider){
 
                 }
             });
+
+            }
         }
+
+        startService();
     }
+
 
     public void onMapSearch(View view) {
         EditText locationSearch = (EditText) findViewById(R.id.editText);

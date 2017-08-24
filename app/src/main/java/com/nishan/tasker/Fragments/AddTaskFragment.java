@@ -2,6 +2,7 @@ package com.nishan.tasker.Fragments;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.Service;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -21,6 +22,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.nishan.tasker.Activity.MapsActivity;
+
 import com.nishan.tasker.Database.DatabaseHandler;
 import com.nishan.tasker.Database.Task;
 import com.nishan.tasker.Notification.NotificationUtils;
@@ -45,10 +47,14 @@ public class AddTaskFragment extends TaskerFragment implements View.OnClickListe
     int sDay;
     String datePicked = "";
 
-    // String slat;
-    // String slng;
 
     String latitude = "", longitude = "", taskDate = "", taskTime = "", taskDetails = "";
+
+    double lat1 = Double.parseDouble(latitude);
+    double lng1 = Double.parseDouble(longitude);
+
+    double lat2 =  (Double)getActivity().getIntent().getExtras().get("lat");
+
 
 
     @Nullable
@@ -261,9 +267,13 @@ public class AddTaskFragment extends TaskerFragment implements View.OnClickListe
             getActivity().getIntent().removeExtra("log");
 
 
+
+
             /// aba service haru run garne lat log snaga check garne sabai kam ya bata garne euta task create bhayesi euta service chalaune ..
             /// and time claculate garne selected date time ra.. current date bich ani time difference nikalne .. jati aaucha ..
             // tya 5sec bhako thau ma rakhane ...
+
+
 
 
             if (!taskDate.isEmpty() && !taskDetails.isEmpty() && !taskTime.isEmpty()) {
@@ -271,6 +281,10 @@ public class AddTaskFragment extends TaskerFragment implements View.OnClickListe
                 dbHandler.insertDatabase(new Task(latitude, longitude, taskDate, taskTime, taskDetails));
 
                 Toast.makeText(getContext(), " Task Added", Toast.LENGTH_SHORT).show();
+
+
+
+
 
                 NotificationUtils.scheduleNotification(getActivity(), " Task Title", " Task Details ", 5000);
 
@@ -297,4 +311,7 @@ public class AddTaskFragment extends TaskerFragment implements View.OnClickListe
 
 
     }
-}
+
+
+    }
+
