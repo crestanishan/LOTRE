@@ -50,12 +50,6 @@ public class AddTaskFragment extends TaskerFragment implements View.OnClickListe
 
     String latitude = "", longitude = "", taskDate = "", taskTime = "", taskDetails = "";
 
-    double lat1 = Double.parseDouble(latitude);
-    double lng1 = Double.parseDouble(longitude);
-
-    double lat2 =  (Double)getActivity().getIntent().getExtras().get("lat");
-
-
 
     @Nullable
     @Override

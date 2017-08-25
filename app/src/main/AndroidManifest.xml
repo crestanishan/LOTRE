@@ -50,6 +50,8 @@
 
         </service>
 
+        <service android:name=".Service.NotifyService"></service>
+
     </application>
 
 </manifest>

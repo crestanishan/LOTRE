@@ -113,10 +113,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     Toast.makeText(MapsActivity.this, " Location selected", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(MapsActivity.this, MainActivity.class);
 
-                    intent.putExtra("lat", selectedLat);
-                    intent.putExtra("log", selectedLog);
+                  //  intent.putExtra("lat", selectedLat);
+                  //  intent.putExtra("log", selectedLog);
 
-                    startActivity(intent);
+                   // startActivity(intent);
 
 
 
@@ -192,8 +192,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, new LocationListener() {
                     @Override
                     public void onLocationChanged(Location location) {
-
-                        double lat2 = location.getLatitude();
+                        /*double lat2 = location.getLatitude();
                         double lat1 = location.getLongitude();
 
                         Intent intent = new Intent(MapsActivity.this, MainActivity.class);
@@ -201,9 +200,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         intent.putExtra("GPSlat", lat2);
                         intent.putExtra("GPSlng", lat1);
 
-                        startActivity(intent);
+                      startActivity(intent);
 
-
+ */
 
 
 
